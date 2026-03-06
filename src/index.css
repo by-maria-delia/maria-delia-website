@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+@theme {
+  /* New palette */
+  --color-janna: #F4EED7;
+  /* main backgrounds */
+  --color-spanish-white: #EAD0C3;
+  /* card backgrounds, image placeholders */
+  --color-jet-stream: #BED5CF;
+  /* primary UI highlights, hover accents */
+  --color-bison-hide: #C8BDAC;
+  /* borders, dividers, subtle surfaces */
+  --color-bud: #A2A69B;
+  /* secondary text, muted labels */
+
+  /* Semantic aliases — components reference these */
+  --color-soft-white: #F4EED7;
+  --color-cream: #EAD0C3;
+  --color-school-blue: #BED5CF;
+  --color-school-blue-dark: #9ABFB8;
+  --color-denim-blue: #4a4540;
+  /* headings, primary buttons — dark earthy */
+  --color-leaf-green: #5E7D6A;
+  --color-teacher-pink: #C0785E;
+  /* warm terracotta to complement the palette */
+  --color-warm-yellow: #E3C567;
+  --color-floral-teal: #BED5CF;
+  --color-dark-text: #2e2a26;
+  --color-soft-gray: #A2A69B;
+
+  --font-display: 'Dancing Script', cursive;
+  --font-body: 'Nunito', sans-serif;
+  --font-handwritten: 'Shadows Into Light', cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-dark-text);
+  background-color: var(--color-soft-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Noise texture overlay for depth */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Typography refinements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Focus ring for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-school-blue);
+  outline-offset: 2px;
+}
+
+/* Staggered fade-in animation */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.animate-fade-in.in-view {
+  opacity: 1;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out both;
+}
+
+/* Stagger delays */
+.delay-1 {
+  animation-delay: 0.1s;
+}
+
+.delay-2 {
+  animation-delay: 0.2s;
+}
+
+.delay-3 {
+  animation-delay: 0.3s;
+}
+
+.delay-4 {
+  animation-delay: 0.4s;
+}
+
+.delay-5 {
+  animation-delay: 0.5s;
+}
+
+/* Button press feedback */
+.btn-press:active {
+  transform: scale(0.97) translateY(1px);
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-janna);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-bison-hide);
+  border-radius: 999px;
+}

@@ -1,0 +1,239 @@
+import { useEffect, useState } from "react";
+import type { Product } from "../types";
+import { buildWhatsAppURL } from "../utils/whatsapp";
+
+interface CustomizerProps {
+	product: Product;
+	onClose: () => void;
+}
+
+export default function Customizer({ product, onClose }: CustomizerProps) {
+	const [size, setSize] = useState("");
+	const [borderColor, setBorderColor] = useState("");
+	const [estampado, setEstampado] = useState("");
+	const [comments, setComments] = useState("");
+
+	const sizes = product.talles
+		? product.talles.split(",").map((s) => s.trim())
+		: [];
+	const borderColors = product.colores_borde
+		? product.colores_borde.split(",").map((s) => s.trim())
+		: [];
+
+	const estampadoNames = product.tipos_de_estampado
+		? product.tipos_de_estampado.split(",").map((s) => s.trim())
+		: [];
+	const estampadoImages = product.imagenes_estampado
+		? product.imagenes_estampado.split(",").map((s) => s.trim())
+		: [];
+
+	const isValid = size && borderColor && estampado;
+
+	useEffect(() => {
+		document.body.style.overflow = "hidden";
+		return () => {
+			document.body.style.overflow = "";
+		};
+	}, []);
+
+	function handleSubmit() {
+		if (!isValid) return;
+		const url = buildWhatsAppURL({
+			model_name: product.nombre,
+			size,
+			border_color: borderColor,
+			tipo_de_estampado: estampado,
+			extra_comments: comments,
+		});
+		window.open(url, "_blank");
+	}
+
+	return (
+		<div
+			className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center bg-dark-text/40 backdrop-blur-sm sm:p-4 animate-fade-in in-view"
+			onClick={(e) => {
+				if (e.target === e.currentTarget) onClose();
+			}}
+		>
+			<div className="bg-soft-white rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl shadow-dark-text/10 animate-fade-up in-view">
+				{/* Header */}
+				<div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-soft-white/90 backdrop-blur-md border-denim-blue/10 rounded-t-2xl">
+					<h3 className="text-2xl tracking-tight font-display text-denim-blue">
+						{product.nombre}
+					</h3>
+					<button
+						type="button"
+						onClick={onClose}
+						className="flex items-center justify-center transition-colors rounded-lg cursor-pointer w-9 h-9 hover:bg-denim-blue/8 text-soft-gray"
+						aria-label="Cerrar"
+					>
+						<svg
+							className="w-5 h-5"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M6 18L18 6M6 6l12 12"
+							/>
+						</svg>
+					</button>
+				</div>
+
+				<div className="p-6 space-y-6">
+					{/* Product image */}
+					{product.imagen && (
+						<div className="overflow-hidden aspect-4/3 rounded-xl bg-cream">
+							<img
+								src={product.imagen}
+								alt={product.nombre}
+								className="object-cover w-full h-full"
+							/>
+						</div>
+					)}
+
+					{/* Price */}
+					{product.precio && (
+						<p className="text-2xl font-bold text-denim-blue tabular-nums">
+							${Number(product.precio).toLocaleString("es-AR")}
+						</p>
+					)}
+
+					{/* Description */}
+					{product.descripcion && (
+						<p className="leading-relaxed text-soft-gray">
+							{product.descripcion}
+						</p>
+					)}
+
+					{/* Size selector */}
+					{sizes.length > 0 && (
+						<fieldset>
+							<legend className="block mb-3 text-sm font-semibold text-dark-text">
+								Talle <span className="text-teacher-pink">*</span>
+							</legend>
+							<div className="flex flex-wrap gap-2">
+								{sizes.map((s) => (
+									<button
+										type="button"
+										key={s}
+										onClick={() => setSize(s)}
+										className={`btn-press px-4 py-2 rounded-lg text-sm font-semibold border transition-all cursor-pointer ${
+											size === s
+												? "bg-denim-blue text-white border-denim-blue shadow-sm"
+												: "border-denim-blue/20 text-denim-blue hover:border-denim-blue/40 hover:bg-denim-blue/5"
+										}`}
+									>
+										{s}
+									</button>
+								))}
+							</div>
+						</fieldset>
+					)}
+
+					{/* Border color selector */}
+					{borderColors.length > 0 && (
+						<fieldset>
+							<legend className="block mb-3 text-sm font-semibold text-dark-text">
+								Color de borde <span className="text-teacher-pink">*</span>
+							</legend>
+							<div className="flex flex-wrap gap-2">
+								{borderColors.map((color) => (
+									<button
+										type="button"
+										key={color}
+										onClick={() => setBorderColor(color)}
+										className={`btn-press px-4 py-2 rounded-lg text-sm font-semibold border transition-all cursor-pointer ${
+											borderColor === color
+												? "bg-denim-blue text-white border-denim-blue shadow-sm"
+												: "border-denim-blue/20 text-denim-blue hover:border-denim-blue/40 hover:bg-denim-blue/5"
+										}`}
+									>
+										{color}
+									</button>
+								))}
+							</div>
+						</fieldset>
+					)}
+
+					{/* Estampado selector */}
+					{estampadoNames.length > 0 && (
+						<fieldset>
+							<legend className="block mb-3 text-sm font-semibold text-dark-text">
+								Tipo de estampado <span className="text-teacher-pink">*</span>
+							</legend>
+							<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+								{estampadoNames.map((name, idx) => (
+									<button
+										type="button"
+										key={name}
+										onClick={() => setEstampado(name)}
+										className={`btn-press rounded-xl border overflow-hidden transition-all cursor-pointer ${
+											estampado === name
+												? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
+												: "border-denim-blue/12 hover:border-denim-blue/30"
+										}`}
+									>
+										{estampadoImages[idx] && (
+											<div className="aspect-square bg-cream">
+												<img
+													src={estampadoImages[idx]}
+													alt={name}
+													className="object-cover w-full h-full"
+												/>
+											</div>
+										)}
+										<p className="text-xs font-semibold text-dark-text p-2.5 text-center">
+											{name}
+										</p>
+									</button>
+								))}
+							</div>
+						</fieldset>
+					)}
+
+					{/* Comments */}
+					<div>
+						<label
+							htmlFor="comments"
+							className="block mb-3 text-sm font-semibold text-dark-text"
+						>
+							Comentarios adicionales
+						</label>
+						<textarea
+							id="comments"
+							value={comments}
+							onChange={(e) => setComments(e.target.value)}
+							placeholder="Ej: quiero el nombre bordado, talle especial, etc."
+							rows={3}
+							className="w-full px-4 py-3 text-sm transition-all border resize-none rounded-xl border-denim-blue/15 text-dark-text placeholder:text-soft-gray/50 focus:outline-none focus:border-school-blue focus:ring-2 focus:ring-school-blue/15 bg-soft-white"
+						/>
+					</div>
+
+					{/* Submit button */}
+					<button
+						type="button"
+						onClick={handleSubmit}
+						disabled={!isValid}
+						className={`btn-press w-full py-3.5 rounded-lg font-semibold text-white transition-all cursor-pointer ${
+							isValid
+								? "bg-leaf-green hover:bg-leaf-green/90 hover:shadow-lg hover:shadow-leaf-green/20"
+								: "bg-denim-blue/20 cursor-not-allowed text-denim-blue/40"
+						}`}
+					>
+						Consultar por WhatsApp
+					</button>
+
+					{!isValid && (
+						<p className="text-xs text-center text-soft-gray">
+							Seleccioná talle, color de borde y estampado para continuar.
+						</p>
+					)}
+				</div>
+			</div>
+		</div>
+	);
+}

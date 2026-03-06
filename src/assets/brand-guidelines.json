@@ -1,0 +1,85 @@
+{
+	"Brand": {
+		"name": "Maria Delia",
+		"description": "Guardapolvos para maestras jardineras — handmade, customizable teacher smocks.",
+		"personality": [
+			"artesanal",
+			"cálido",
+			"prolijo",
+			"clásico",
+			"amigable",
+			"docente",
+			"femenino"
+		]
+	},
+	"Colors": {
+		"core": [
+			{
+				"name": "School Blue",
+				"hex": "#9DB7D5",
+				"usage": ["primary UI", "product highlight backgrounds"]
+			},
+			{
+				"name": "Denim Blue",
+				"hex": "#5E6F82",
+				"usage": ["secondary buttons", "accents", "text highlights"]
+			},
+			{
+				"name": "Soft White",
+				"hex": "#F7F7F4",
+				"usage": ["main backgrounds"]
+			},
+			{
+				"name": "Leaf Green",
+				"hex": "#5E7D6A",
+				"usage": ["accents", "nature references"]
+			}
+		],
+		"accents": [
+			{
+				"name": "Teacher Pink",
+				"hex": "#E67A8A",
+				"usage": ["border trims", "small CTA details", "icon accents"]
+			},
+			{
+				"name": "Warm Yellow",
+				"hex": "#E3C567",
+				"usage": ["tiny details only"]
+			},
+			{
+				"name": "Floral Teal",
+				"hex": "#6FAFB4",
+				"usage": ["pocket print references"]
+			}
+		],
+		"text": [
+			{
+				"name": "Dark Text",
+				"hex": "#333333",
+				"usage": ["main text"]
+			},
+			{
+				"name": "Soft Gray",
+				"hex": "#777777",
+				"usage": ["secondary text"]
+			}
+		]
+	},
+	"Fonts": {
+		"brand_display": {
+			"examples": ["Dancing Script", "Allura", "Playfair Script"],
+			"usage": ["logo", "hero title"],
+			"style": ["script", "elegant"]
+		},
+		"primary_ui": {
+			"examples": ["Montserrat", "Poppins", "Nunito"],
+			"usage": ["body text", "navigation", "UI elements"],
+			"style": ["sans-serif", "friendly", "readable"]
+		},
+		"handwritten_accent": {
+			"examples": ["Shadows Into Light", "Patrick Hand"],
+			"usage": ["labels", "badges", "product notes"],
+			"style": ["handwritten", "casual"]
+		}
+	}
+}
