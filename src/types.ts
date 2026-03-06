@@ -4,9 +4,6 @@ export interface Product {
 	imagen?: string;
 	descripcion?: string;
 	talles?: string;
-	colores_borde?: string;
-	tipos_de_estampado?: string;
-	imagenes_estampado?: string;
 	disponible?: string;
 }
 
@@ -23,4 +20,9 @@ export interface WhatsAppParams {
 	border_color: string;
 	tipo_de_estampado: string;
 	extra_comments: string;
+}
+
+export interface DriveImage {
+	id: string;
+	name: string;
 }

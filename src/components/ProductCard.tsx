@@ -48,7 +48,7 @@ export default function ProductCard({
 				<div className="mt-auto">
 					{product.precio && (
 						<p className="mb-4 text-xl font-bold text-denim-blue tabular-nums">
-							${Number(product.precio).toLocaleString("es-AR")}
+							{product.precio}
 						</p>
 					)}
 					<button

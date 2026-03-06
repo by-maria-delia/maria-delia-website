@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useDriveFolder, { driveImageUrl } from "../hooks/useDriveFolder";
 import type { Product } from "../types";
 import { buildWhatsAppURL } from "../utils/whatsapp";
 
@@ -7,24 +8,24 @@ interface CustomizerProps {
 	onClose: () => void;
 }
 
+const formatImageName = (name: string) =>
+	name
+		.replace(/\.[^.]+$/, "")
+		.replace(/-/g, " ")
+		.replace(/\b\w/g, (c) => c.toUpperCase());
+
 export default function Customizer({ product, onClose }: CustomizerProps) {
 	const [size, setSize] = useState("");
 	const [borderColor, setBorderColor] = useState("");
 	const [estampado, setEstampado] = useState("");
 	const [comments, setComments] = useState("");
 
+	// TODO: handle loading and error states
+	const { images: stampImages } = useDriveFolder("stamps");
+	const { images: borderColorImages } = useDriveFolder("border_colors");
+
 	const sizes = product.talles
 		? product.talles.split(",").map((s) => s.trim())
-		: [];
-	const borderColors = product.colores_borde
-		? product.colores_borde.split(",").map((s) => s.trim())
-		: [];
-
-	const estampadoNames = product.tipos_de_estampado
-		? product.tipos_de_estampado.split(",").map((s) => s.trim())
-		: [];
-	const estampadoImages = product.imagenes_estampado
-		? product.imagenes_estampado.split(",").map((s) => s.trim())
 		: [];
 
 	const isValid = size && borderColor && estampado;
@@ -55,9 +56,9 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 				if (e.target === e.currentTarget) onClose();
 			}}
 		>
-			<div className="bg-soft-white rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-2xl shadow-dark-text/10 animate-fade-up in-view">
+			<div className="bg-soft-white rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-hidden shadow-2xl shadow-dark-text/10 animate-fade-up in-view flex flex-col">
 				{/* Header */}
-				<div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b bg-soft-white/90 backdrop-blur-md border-denim-blue/10 rounded-t-2xl">
+				<div className="flex items-center justify-between px-6 py-4 border-b shrink-0 bg-soft-white border-denim-blue/10">
 					<h3 className="text-2xl tracking-tight font-display text-denim-blue">
 						{product.nombre}
 					</h3>
@@ -83,7 +84,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 					</button>
 				</div>
 
-				<div className="p-6 space-y-6">
+				<div className="p-6 space-y-6 overflow-y-auto">
 					{/* Product image */}
 					{product.imagen && (
 						<div className="overflow-hidden aspect-4/3 rounded-xl bg-cream">
@@ -135,62 +136,72 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 					)}
 
 					{/* Border color selector */}
-					{borderColors.length > 0 && (
+					{borderColorImages.length > 0 && (
 						<fieldset>
 							<legend className="block mb-3 text-sm font-semibold text-dark-text">
 								Color de borde <span className="text-teacher-pink">*</span>
 							</legend>
 							<div className="flex flex-wrap gap-2">
-								{borderColors.map((color) => (
-									<button
-										type="button"
-										key={color}
-										onClick={() => setBorderColor(color)}
-										className={`btn-press px-4 py-2 rounded-lg text-sm font-semibold border transition-all cursor-pointer ${
-											borderColor === color
-												? "bg-denim-blue text-white border-denim-blue shadow-sm"
-												: "border-denim-blue/20 text-denim-blue hover:border-denim-blue/40 hover:bg-denim-blue/5"
-										}`}
-									>
-										{color}
-									</button>
-								))}
+								{borderColorImages.map((image) => {
+									const displayName = formatImageName(image.name);
+									return (
+										<button
+											type="button"
+											key={image.id}
+											onClick={() => setBorderColor(displayName)}
+											className={`btn-press rounded-xl border overflow-hidden transition-all cursor-pointer shrink-0 w-28 ${
+												borderColor === displayName
+													? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
+													: "border-denim-blue/12 hover:border-denim-blue/30"
+											}`}
+										>
+											<div className="aspect-square bg-cream">
+												<img
+													src={driveImageUrl(image.id)}
+													alt={displayName}
+													className="object-cover w-full h-full"
+												/>
+											</div>
+										</button>
+									);
+								})}
 							</div>
 						</fieldset>
 					)}
 
 					{/* Estampado selector */}
-					{estampadoNames.length > 0 && (
-						<fieldset>
+					{stampImages.length > 0 && (
+						<fieldset className="min-w-0">
 							<legend className="block mb-3 text-sm font-semibold text-dark-text">
 								Tipo de estampado <span className="text-teacher-pink">*</span>
 							</legend>
-							<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-								{estampadoNames.map((name, idx) => (
-									<button
-										type="button"
-										key={name}
-										onClick={() => setEstampado(name)}
-										className={`btn-press rounded-xl border overflow-hidden transition-all cursor-pointer ${
-											estampado === name
-												? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
-												: "border-denim-blue/12 hover:border-denim-blue/30"
-										}`}
-									>
-										{estampadoImages[idx] && (
+							<div className="flex gap-3 overflow-x-scroll py-2.5 px-1 custom-scrollbar">
+								{stampImages.map((image) => {
+									const displayName = formatImageName(image.name);
+									return (
+										<button
+											type="button"
+											key={image.id}
+											onClick={() => setEstampado(displayName)}
+											className={`btn-press rounded-xl border overflow-hidden transition-all cursor-pointer shrink-0 w-28 ${
+												estampado === displayName
+													? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
+													: "border-denim-blue/12 hover:border-denim-blue/30"
+											}`}
+										>
 											<div className="aspect-square bg-cream">
 												<img
-													src={estampadoImages[idx]}
-													alt={name}
+													src={driveImageUrl(image.id)}
+													alt={displayName}
 													className="object-cover w-full h-full"
 												/>
 											</div>
-										)}
-										<p className="text-xs font-semibold text-dark-text p-2.5 text-center">
-											{name}
-										</p>
-									</button>
-								))}
+											<p className="text-xs font-semibold text-dark-text p-2.5 text-center h-full">
+												{displayName}
+											</p>
+										</button>
+									);
+								})}
 							</div>
 						</fieldset>
 					)}
