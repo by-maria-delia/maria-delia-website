@@ -4,10 +4,10 @@
 React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4 + React Query (TanStack Query). Linting: ESLint + Biome. Deployed via gh-pages.
 
 ## Commands
-- `npm run dev` — start dev server
-- `npm run build` — production build
-- `npm run lint` — run ESLint
-- `npm run deploy` — build + deploy to GitHub Pages
+- `yarn dev` — start dev server
+- `yarn build` — production build
+- `yarn lint` — run ESLint
+- `yarn deploy` — build + deploy to GitHub Pages
 
 ## Project Structure
 ```
