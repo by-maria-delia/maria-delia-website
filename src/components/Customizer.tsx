@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import useDriveFolder, { driveImageUrl } from "../hooks/useDriveFolder";
+import {
+	useBorderColorImages,
+	useProductsDetails,
+	useStampImages,
+} from "../data";
+import { driveImageUrl } from "../hooks/useDriveFolder";
 import type { Product } from "../types";
 import { buildWhatsAppURL } from "../utils/whatsapp";
 
@@ -21,12 +26,14 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 	const [comments, setComments] = useState("");
 
 	// TODO: handle loading and error states
-	const { images: stampImages } = useDriveFolder("stamps");
-	const { images: borderColorImages } = useDriveFolder("border_colors");
+	const { images: stampImages } = useStampImages();
+	const { images: borderColorImages } = useBorderColorImages();
+	const { data: productDetails } = useProductsDetails();
 
-	const sizes = product.talles
-		? product.talles.split(",").map((s) => s.trim())
-		: [];
+	// TODO: use a fallback with fixed sizes to avoid sudden appeareance
+	const sizes = productDetails?.talles
+		? productDetails.talles.split(",").map((s) => s.trim())
+		: ["XS","S","M","L","XL","XXL"];
 
 	const isValid = size && borderColor && estampado;
 
@@ -89,7 +96,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 					{product.imagen && (
 						<div className="overflow-hidden aspect-4/3 rounded-xl bg-cream">
 							<img
-								src={product.imagen}
+								src={driveImageUrl(product.imagen)}
 								alt={product.nombre}
 								className="object-cover w-full h-full"
 							/>
@@ -99,7 +106,7 @@ export default function Customizer({ product, onClose }: CustomizerProps) {
 					{/* Price */}
 					{product.precio && (
 						<p className="text-2xl font-bold text-denim-blue tabular-nums">
-							${Number(product.precio).toLocaleString("es-AR")}
+							{product.precio}
 						</p>
 					)}
 

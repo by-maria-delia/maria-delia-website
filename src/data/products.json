@@ -1,0 +1,19 @@
+{
+	"meta": {
+		"fetchedAt": "2026-03-09T05:11:24.808Z"
+	},
+	"data": [
+		{
+			"nombre": "Tela Arciel y Jean",
+			"precio": " $15.000,00",
+			"imagen Preview": "",
+			"imagen": "https://picsum.photos/300",
+			"descripcion": "Guardapolvo con estampitas de arciel y jean super lindo",
+			"disponible": "TRUE",
+			"talles": "S,M,L,XL",
+			"colores_borde": "Rojo,Verde,Azul",
+			"tipos_de_estampado": "LINDO,FEO,LOL,TEL,FOL",
+			"imagenes_estampado": "https://picsum.photos/300,https://picsum.photos/300, https://picsum.photos/300,https://picsum.photos/300,https://picsum.photos/300"
+		}
+	]
+}

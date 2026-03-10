@@ -4,14 +4,12 @@ import {
 	GALLERY_DRIVE_FOLDER_ID,
 	STAMPS_DRIVE_FOLDER_ID,
 } from "../config";
-import type { DriveImage } from "../types";
+import type { DriveFolderType, DriveImage } from "../types";
 
-type FolderType = "gallery" | "stamps" | "border_colors";
-
-const FOLDER_IDS: Record<FolderType, string> = {
+const FOLDER_IDS: Record<DriveFolderType, string> = {
 	gallery: GALLERY_DRIVE_FOLDER_ID,
 	stamps: STAMPS_DRIVE_FOLDER_ID,
-	border_colors: BORDER_COLORS_DRIVE_FOLDER_ID,
+	borderColors: BORDER_COLORS_DRIVE_FOLDER_ID,
 };
 
 interface UseDriveFolderResult {
@@ -22,22 +20,24 @@ interface UseDriveFolderResult {
 
 const apiKey = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY;
 
-export default function useDriveFolder(type: FolderType): UseDriveFolderResult {
+export default function useDriveFolder(
+	type: DriveFolderType | null,
+): UseDriveFolderResult {
 	const [images, setImages] = useState<DriveImage[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(type !== null);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!apiKey) {
+		if (!type || !apiKey) {
 			setLoading(false);
 			return;
 		}
 
+		const folderId = FOLDER_IDS[type];
 		let cancelled = false;
 
 		async function fetchFolder() {
 			try {
-				const folderId = FOLDER_IDS[type];
 				const params = new URLSearchParams({
 					q: `'${folderId}' in parents and mimeType contains 'image/' and trashed = false`,
 					key: apiKey,
@@ -78,8 +78,17 @@ export default function useDriveFolder(type: FolderType): UseDriveFolderResult {
 
 /** Builds a direct-display URL for a publicly shared Drive image. */
 export function driveImageUrl(fileId: string): string {
+	// if instead of a fileId is passed a full URL, extract the ID
+	if (fileId.startsWith("http")) {
+		// full url example https://drive.google.com/file/d/1o32KQ5ABnS-xBnSJ3tLNd5QcHGRyC-8d/view?usp=drive_link
+		// get the id part between /d/ and the next /
+		const match = fileId.match(/\/d\/([^/]+)/);
+		if (match) fileId = match[1];
+		else {
+			// TODO: add a placeholder image for these cases
+			console.warn("Could not extract file ID from URL:", fileId);
+			return "";
+		}
+	}
 	return `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${import.meta.env.VITE_GOOGLE_DRIVE_API_KEY}`;
-	// return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-	// return `https://drive.google.com/uc?export=view&id=${fileId}`;
-	// return `https://lh3.googleusercontent.com/d/${fileId}`;
 }

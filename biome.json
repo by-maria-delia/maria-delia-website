@@ -18,5 +18,16 @@
 				"noStaticElementInteractions": "off"
 			}
 		}
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"experimentalScannerIgnores": ["node_modules", ".next"],
+		"includes": [
+			"src/**/*.{js,jsx,ts,tsx,json,md,mdx,yml,yaml,html,css,scss,sass}",
+			"!**/node_modules/**/*",
+			"!**/dist",
+			"!**/out",
+			"!**/.git"
+		]
 	}
 }

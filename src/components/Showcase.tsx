@@ -1,12 +1,12 @@
-import useDriveFolder, { driveImageUrl } from "../hooks/useDriveFolder";
+import { useGalleryImages } from "../data";
+import { driveImageUrl } from "../hooks/useDriveFolder";
 import FadeUp from "./FadeUp";
 
 export default function Showcase() {
-	const { images, loading, error } = useDriveFolder("gallery");
+	// TODO: handle error/loading states
+	const { images: galleryImages } = useGalleryImages();
 
-	if (error) return null;
-	if (loading) return null;
-	if (images.length === 0) return null;
+	if (galleryImages.length === 0) return null;
 
 	return (
 		<section id="galeria" className="px-4 py-24 bg-soft-white">
@@ -22,7 +22,7 @@ export default function Showcase() {
 
 				{/* Masonry-style grid with varied aspect ratios */}
 				<div className="gap-4 space-y-4 columns-2 md:columns-3">
-					{images.map((image, idx) => (
+					{galleryImages.map((image, idx) => (
 						<FadeUp
 							key={image.id}
 							delay={Math.min(idx, 4) * 80}

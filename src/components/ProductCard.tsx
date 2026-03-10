@@ -1,3 +1,4 @@
+import { driveImageUrl } from "../hooks/useDriveFolder";
 import type { Product } from "../types";
 
 interface ProductCardProps {
@@ -14,7 +15,7 @@ export default function ProductCard({
 			<div className="overflow-hidden aspect-3/4 bg-cream">
 				{product.imagen ? (
 					<img
-						src={product.imagen}
+						src={driveImageUrl(product.imagen)}
 						alt={product.nombre}
 						className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
 					/>

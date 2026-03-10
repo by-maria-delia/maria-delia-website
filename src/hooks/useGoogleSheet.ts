@@ -1,25 +1,32 @@
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
+import { PRODUCTS_SHEET_CSV_URL, SMOCKS_DATA_SHEET_CSV_URL } from "../config";
+import type { SheetType } from "../types";
 
 interface UseGoogleSheetResult<T> {
 	data: T[];
 	loading: boolean;
 	error: string | null;
 }
+const SHEET_GIDS: Record<SheetType, string> = {
+	products: PRODUCTS_SHEET_CSV_URL,
+	details: SMOCKS_DATA_SHEET_CSV_URL,
+};
 
 export default function useGoogleSheet<T = Record<string, string>>(
-	csvUrl: string,
+	type: SheetType | null,
 ): UseGoogleSheetResult<T> {
 	const [data, setData] = useState<T[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!csvUrl) {
+		if (!type) {
 			setLoading(false);
 			return;
 		}
 
+		const csvUrl = SHEET_GIDS[type];
 		let cancelled = false;
 
 		async function fetchSheet() {
@@ -47,7 +54,7 @@ export default function useGoogleSheet<T = Record<string, string>>(
 		return () => {
 			cancelled = true;
 		};
-	}, [csvUrl]);
+	}, [type]);
 
 	return { data, loading, error };
 }

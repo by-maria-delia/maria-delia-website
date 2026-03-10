@@ -7,6 +7,10 @@ export interface Product {
 	disponible?: string;
 }
 
+export interface SmockData {
+	talles: string;
+}
+
 export interface GalleryPhoto {
 	id?: string;
 	imagen: string;
@@ -21,6 +25,10 @@ export interface WhatsAppParams {
 	tipo_de_estampado: string;
 	extra_comments: string;
 }
+
+export type SheetType = "products" | "details";
+
+export type DriveFolderType = "gallery" | "stamps" | "borderColors";
 
 export interface DriveImage {
 	id: string;
