@@ -12,7 +12,7 @@ const stubs = {
 	"smocks.json": EMPTY_DATA,
 	"gallery.json": EMPTY_DATA,
 	"stamps.json": EMPTY_DATA,
-	"border-colors.json": EMPTY_DATA,
+	"pockets.json": EMPTY_DATA,
 	"product-images.json": EMPTY_DATA,
 	"drive-manifest.json": "{}",
 };

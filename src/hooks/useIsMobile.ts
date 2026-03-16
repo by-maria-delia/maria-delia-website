@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 
-// pointer: coarse = touch screen (mobile/tablet), pointer: fine = mouse (desktop)
-const TOUCH_QUERY = "(pointer: coarse)";
+const SCREEN_MD_QUERY = "(max-width: 768px)";
 
 const useIsMobile = () => {
-	const [isMobile, setIsMobile] = useState(() => window.matchMedia(TOUCH_QUERY).matches);
+	const [isMobile, setIsMobile] = useState(
+		() => window.matchMedia(SCREEN_MD_QUERY).matches,
+	);
 
 	useEffect(() => {
-		const mql = window.matchMedia(TOUCH_QUERY);
+		const checkIsMobile = () => {
+			const mql = window.matchMedia(SCREEN_MD_QUERY);
+			setIsMobile(mql.matches);
+		};
+		checkIsMobile();
+
 		const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+
+		const mql = window.matchMedia(SCREEN_MD_QUERY);
 		mql.addEventListener("change", handler);
 		return () => mql.removeEventListener("change", handler);
 	}, []);

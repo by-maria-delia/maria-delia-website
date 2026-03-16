@@ -8,8 +8,8 @@ import type {
 	SheetType,
 	SmockData,
 } from "../types";
-import borderColorsJson from "./border-colors.json";
 import galleryJson from "./gallery.json";
+import pocketsJson from "./pockets.json";
 import productImagesJson from "./product-images.json";
 import productsJson from "./products.json";
 import smocksJson from "./smocks.json";
@@ -20,7 +20,7 @@ const staticProducts = productsJson.data as Product[];
 const staticProductsDetails = smocksJson.data as SmockData[];
 const staticGalleryImages = galleryJson.data as DriveImage[];
 const staticStampImages = stampsJson.data as DriveImage[];
-const staticBorderColorImages = borderColorsJson.data as DriveImage[];
+const staticPocketsImages = pocketsJson.data as DriveImage[];
 const staticProductFolders = productImagesJson.data as DriveFolder[];
 
 /**
@@ -63,14 +63,13 @@ export const useGalleryImages = () =>
 export const useStampImages = () =>
 	useDriveFolderDev("stamps", staticStampImages);
 
-export const useBorderColorImages = () =>
-	useDriveFolderDev("borderColors", staticBorderColorImages);
+export const usePocketsImages = () =>
+	useDriveFolderDev("pockets", staticPocketsImages);
 
 export const useProductImages = () => {
-	const data = useDriveFolder(
-		import.meta.env.DEV ? "productsImages" : null,
-		{ multipleFolders: true },
-	);
+	const data = useDriveFolder(import.meta.env.DEV ? "productsImages" : null, {
+		multipleFolders: true,
+	});
 
 	if (!import.meta.env.DEV)
 		return { folders: staticProductFolders, loading: false, error: null };

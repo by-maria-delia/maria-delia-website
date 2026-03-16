@@ -87,7 +87,7 @@ const FOLDER_IDS = {
 	productsImages: "1GFqc4b_f0AOx77SctLcDIlVSSwSlxkQX",
 	gallery: "1A5Wa_M-i2aXM4BCLA-xvLgzzGriQ3Na1",
 	stamps: "1oM-E5h_3KE63q5l3-_x3nYBeVCN6SE2k",
-	borderColors: "1GFqc4b_f0AOx77SctLcDIlVSSwSlxkQX",
+	pockets: "1DFMeP9_eSUcTaHiV-ARux5bT4Tt3eVXI",
 };
 
 // Paginated Drive file listing — mirrors useDriveFolder.ts driveList()
@@ -197,7 +197,7 @@ async function main() {
 		fetchSheet(210216102, "smocks.json"),
 		fetchDriveFolder("gallery", "gallery.json"),
 		fetchDriveFolder("stamps", "stamps.json"),
-		fetchDriveFolder("borderColors", "border-colors.json"),
+		fetchDriveFolder("pockets", "pockets.json"),
 		fetchDriveMultiFolder("productsImages", "product-images.json"),
 	]);
 
@@ -205,14 +205,14 @@ async function main() {
 	const readJson = (f) => JSON.parse(readFileSync(join(DATA_DIR, f), "utf-8"));
 	const galleryData = readJson("gallery.json");
 	const stampsData = readJson("stamps.json");
-	const borderColorsData = readJson("border-colors.json");
+	const pocketsData = readJson("pockets.json");
 	const productsData = readJson("products.json");
 	const productImagesData = readJson("product-images.json");
 
 	const imageIds = [
 		...galleryData.data.map((f) => f.id),
 		...stampsData.data.map((f) => f.id),
-		...borderColorsData.data.map((f) => f.id),
+		...pocketsData.data.map((f) => f.id),
 		...productsData.data.map((p) => p.imagen).filter(Boolean),
 		...productImagesData.data.flatMap((folder) => folder.images.map((img) => img.id)),
 	];

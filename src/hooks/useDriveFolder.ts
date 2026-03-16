@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-	BORDER_COLORS_DRIVE_FOLDER_ID,
 	GALLERY_DRIVE_FOLDER_ID,
+	POCKETS_DRIVE_FOLDER_ID,
 	PRODUCTS_IMAGES_DRIVE_FOLDER_ID,
 	STAMPS_DRIVE_FOLDER_ID,
 } from "../config";
@@ -11,7 +11,7 @@ const FOLDER_IDS: Record<DriveFolderType, string> = {
 	productsImages: PRODUCTS_IMAGES_DRIVE_FOLDER_ID,
 	gallery: GALLERY_DRIVE_FOLDER_ID,
 	stamps: STAMPS_DRIVE_FOLDER_ID,
-	borderColors: BORDER_COLORS_DRIVE_FOLDER_ID,
+	pockets: POCKETS_DRIVE_FOLDER_ID,
 };
 
 interface UseDriveFolderOptions {

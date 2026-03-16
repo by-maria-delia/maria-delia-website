@@ -21,7 +21,7 @@ export interface GalleryPhoto {
 export interface WhatsAppParams {
 	model_name: string;
 	size: string;
-	border_color: string;
+	pockets: string;
 	tipo_de_estampado: string;
 	extra_comments: string;
 }
@@ -31,7 +31,7 @@ export type SheetType = "products" | "details";
 export type DriveFolderType =
 	| "gallery"
 	| "stamps"
-	| "borderColors"
+	| "pockets"
 	| "productsImages";
 
 export interface DriveImage {

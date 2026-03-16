@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import SizeGuideImg from "../assets/sizes_guide.png";
-import {
-	useBorderColorImages,
-	useProductsDetails,
-	useStampImages,
-} from "../data";
+import { usePocketsImages, useProductsDetails, useStampImages } from "../data";
 import { driveImageUrl } from "../hooks/useDriveFolder";
+import useIsMobile from "../hooks/useIsMobile";
 import type { DriveImage, Product } from "../types";
+import { cn } from "../utils/cn";
 import { buildWhatsAppURL } from "../utils/whatsapp";
 import ImageCarousel from "./ImageCarousel";
 
@@ -28,13 +26,14 @@ export default function Customizer({
 	onClose,
 }: CustomizerProps) {
 	const [size, setSize] = useState("");
-	const [borderColor, setBorderColor] = useState("");
+	const [pockets, setPockets] = useState("");
 	const [estampado, setEstampado] = useState("");
 	const [comments, setComments] = useState("");
 
-	// TODO: handle loading and error states
+	const isMobile = useIsMobile();
+
 	const { images: stampImages } = useStampImages();
-	const { images: borderColorImages } = useBorderColorImages();
+	const { images: pocketsImages } = usePocketsImages();
 	const { data: productDetails } = useProductsDetails();
 	const carouselImages: DriveImage[] = [
 		...(modelImages && modelImages.length > 0
@@ -49,7 +48,7 @@ export default function Customizer({
 		? productDetails.talles.split(",").map((s) => s.trim())
 		: ["XS", "S", "M", "L", "XL", "XXL"];
 
-	const isValid = size && borderColor && estampado;
+	const isValid = size && pockets && estampado;
 
 	useEffect(() => {
 		document.body.style.overflow = "hidden";
@@ -63,7 +62,7 @@ export default function Customizer({
 		const url = buildWhatsAppURL({
 			model_name: product.nombre,
 			size,
-			border_color: borderColor,
+			pockets,
 			tipo_de_estampado: estampado,
 			extra_comments: comments,
 		});
@@ -105,7 +104,7 @@ export default function Customizer({
 					</button>
 				</div>
 
-				<div className="p-6 space-y-6 overflow-y-auto md:flex md:gap-8 md:overflow-hidden">
+				<div className="p-6 space-y-6 overflow-y-auto md:pr-0 md:flex md:gap-8 md:overflow-hidden">
 					{/* Product images */}
 					<ImageCarousel
 						images={carouselImages}
@@ -113,7 +112,7 @@ export default function Customizer({
 						className="md:w-1/2"
 					/>
 
-					<div className="md:w-1/2 md:overflow-y-scroll">
+					<div className="md:px-2 md:w-1/2 md:overflow-y-scroll space-y-4">
 						<div className="flex justify-between">
 							<h4 className="text-4xl tracking-tight font-display text-denim-blue">
 								{product.nombre}
@@ -145,11 +144,12 @@ export default function Customizer({
 											type="button"
 											key={s}
 											onClick={() => setSize(s)}
-											className={`btn-press px-4 py-2 rounded-lg text-sm font-semibold border transition-all cursor-pointer ${
+											className={cn(
+												"btn-press px-4 py-2 rounded-lg text-sm font-semibold border transition-all cursor-pointer",
 												size === s
 													? "bg-denim-blue text-white border-denim-blue shadow-sm"
-													: "border-denim-blue/20 text-denim-blue hover:border-denim-blue/40 hover:bg-denim-blue/5"
-											}`}
+													: "border-denim-blue/20 text-denim-blue hover:border-denim-blue/40 hover:bg-denim-blue/5",
+											)}
 										>
 											{s}
 										</button>
@@ -158,31 +158,37 @@ export default function Customizer({
 							</fieldset>
 						)}
 
-						{/* Border color selector */}
-						{borderColorImages.length > 0 && (
+						{/* Pockets selector */}
+						{pocketsImages.length > 0 && (
 							<fieldset>
 								<legend className="block mb-3 text-sm font-semibold text-dark-text">
-									Color de borde <span className="text-teacher-pink">*</span>
+									Tipo de bolsillo <span className="text-teacher-pink">*</span>
 								</legend>
-								<div className="flex flex-wrap gap-2">
-									{borderColorImages.map((image) => {
+								<div
+									className={cn("flex flex-wrap gap-2", {
+										"flex-nowrap gap-3 py-2.5 px-1 overflow-x-scroll custom-scrollbar":
+											pocketsImages.length > 8 || isMobile,
+									})}
+								>
+									{pocketsImages.map((image) => {
 										const displayName = formatImageName(image.name);
 										return (
 											<button
 												type="button"
 												key={image.id}
-												onClick={() => setBorderColor(displayName)}
-												className={`btn-press rounded-xl border overflow-hidden transition-all cursor-pointer shrink-0 w-28 ${
-													borderColor === displayName
+												onClick={() => setPockets(displayName)}
+												className={cn(
+													"btn-press rounded-xl border overflow-hidden transition-all shrink-0 h-fit max-w-28 cursor-pointer",
+													pockets === displayName
 														? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
-														: "border-denim-blue/12 hover:border-denim-blue/30"
-												}`}
+														: "border-denim-blue/12 hover:border-denim-blue/30",
+												)}
 											>
-												<div className="aspect-square bg-cream">
+												<div className="bg-cream">
 													<img
 														src={driveImageUrl(image.id)}
 														alt={displayName}
-														className="object-cover w-full h-full"
+														className="object-contain w-full h-full"
 													/>
 												</div>
 											</button>
@@ -206,11 +212,12 @@ export default function Customizer({
 												type="button"
 												key={image.id}
 												onClick={() => setEstampado(displayName)}
-												className={`btn-press rounded-xl border overflow-hidden transition-all cursor-pointer shrink-0 w-28 ${
+												className={cn(
+													"btn-press rounded-xl border overflow-hidden transition-all cursor-pointer shrink-0 w-28",
 													estampado === displayName
 														? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
-														: "border-denim-blue/12 hover:border-denim-blue/30"
-												}`}
+														: "border-denim-blue/12 hover:border-denim-blue/30",
+												)}
 											>
 												<div className="aspect-square bg-cream">
 													<img
@@ -243,7 +250,7 @@ export default function Customizer({
 								onChange={(e) => setComments(e.target.value)}
 								placeholder="Ej: quiero el nombre bordado, talle especial, etc."
 								rows={3}
-								className="w-full px-4 py-3 text-sm transition-all border resize-none rounded-xl border-denim-blue/15 text-dark-text placeholder:text-soft-gray/50 focus:outline-none focus:border-school-blue focus:ring-2 focus:ring-school-blue/15 bg-soft-white"
+								className="w-full px-4 py-3 text-base transition-all border resize-none rounded-xl border-denim-blue/15 text-dark-text placeholder:text-soft-gray/50 focus:outline-none focus:border-school-blue focus:ring-2 focus:ring-school-blue/15 bg-soft-white"
 							/>
 						</div>
 
@@ -252,13 +259,14 @@ export default function Customizer({
 							type="button"
 							onClick={handleSubmit}
 							disabled={!isValid}
-							className={`btn-press w-full py-3.5 rounded-lg font-semibold text-white transition-all cursor-pointer ${
+							className={cn(
+								"btn-press w-full py-3.5 rounded-lg font-semibold text-white transition-all cursor-pointer",
 								isValid
 									? "bg-leaf-green hover:bg-leaf-green/90 hover:shadow-lg hover:shadow-leaf-green/20"
-									: "bg-denim-blue/20 cursor-not-allowed text-denim-blue/40"
-							}`}
+									: "bg-denim-blue/20 cursor-not-allowed text-denim-blue/40",
+							)}
 						>
-							Consultar por WhatsApp
+							Finalizar por WhatsApp
 						</button>
 
 						{!isValid && (
