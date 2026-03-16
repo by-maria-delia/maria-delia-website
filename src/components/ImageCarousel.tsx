@@ -127,10 +127,15 @@ export default function ImageCarousel({
 					<>
 						<button
 							type="button"
+							aria-label="Imagen anterior"
 							onClick={() => swiperInstance?.slidePrev()}
-							className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/80 hover:bg-white shadow-sm flex items-center justify-center transition cursor-pointer"
+							className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-sm flex items-center justify-center transition cursor-pointer"
 						>
-							<svg className="w-4 h-4 text-dark-text" viewBox="0 0 24 24" fill="none">
+							<svg
+								className="w-4 h-4 text-dark-text"
+								viewBox="0 0 24 24"
+								fill="none"
+							>
 								<path
 									d="M15 19l-7-7 7-7"
 									stroke="currentColor"
@@ -142,10 +147,15 @@ export default function ImageCarousel({
 						</button>
 						<button
 							type="button"
+							aria-label="Imagen siguiente"
 							onClick={() => swiperInstance?.slideNext()}
-							className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/80 hover:bg-white shadow-sm flex items-center justify-center transition cursor-pointer"
+							className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white shadow-sm flex items-center justify-center transition cursor-pointer"
 						>
-							<svg className="w-4 h-4 text-dark-text" viewBox="0 0 24 24" fill="none">
+							<svg
+								className="w-4 h-4 text-dark-text"
+								viewBox="0 0 24 24"
+								fill="none"
+							>
 								<path
 									d="M9 5l7 7-7 7"
 									stroke="currentColor"
@@ -161,19 +171,30 @@ export default function ImageCarousel({
 
 			{/* Pagination dots: below the image, never inside the zoom area */}
 			{hasMultiple && (
-				<div className="flex justify-center gap-1.5 mt-3">
+				<div
+					className="flex justify-center mt-1"
+					role="tablist"
+					aria-label="Imágenes del producto"
+				>
 					{images.map((_, i) => (
 						<button
 							// biome-ignore lint/suspicious/noArrayIndexKey: index is stable for a static images array
 							key={i}
 							type="button"
+							role="tab"
+							aria-selected={i === activeIndex}
+							aria-label={`Imagen ${i + 1} de ${images.length}`}
 							onClick={() => swiperInstance?.slideToLoop(i)}
-							className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
-								i === activeIndex
-									? "bg-denim-blue"
-									: "bg-denim-blue/25 hover:bg-denim-blue/40"
-							}`}
-						/>
+							className="p-2 cursor-pointer group"
+						>
+							<span
+								className={`block w-2 h-2 rounded-full transition-colors ${
+									i === activeIndex
+										? "bg-denim-blue"
+										: "bg-denim-blue/25 group-hover:bg-denim-blue/40"
+								}`}
+							/>
+						</button>
 					))}
 				</div>
 			)}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SizeGuideImg from "../assets/sizes_guide.png";
 import { usePocketsImages, useProductsDetails, useStampImages } from "../data";
 import { driveImageUrl } from "../hooks/useDriveFolder";
@@ -49,11 +49,67 @@ export default function Customizer({
 		: ["XS", "S", "M", "L", "XL", "XXL"];
 
 	const isValid = size && pockets && estampado;
+	const dialogRef = useRef<HTMLDivElement>(null);
 
+	// Lock body scroll + close on Escape
 	useEffect(() => {
 		document.body.style.overflow = "hidden";
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") onClose();
+		};
+		document.addEventListener("keydown", handleKeyDown);
+
 		return () => {
 			document.body.style.overflow = "";
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [onClose]);
+
+	// Focus trap: keep focus inside the dialog at all times
+	useEffect(() => {
+		const dialog = dialogRef.current;
+		if (!dialog) return;
+
+		const getFocusable = () =>
+			dialog.querySelectorAll<HTMLElement>(
+				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+			);
+
+		// Wrap Tab at boundaries
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key !== "Tab") return;
+			const focusable = getFocusable();
+			if (focusable.length === 0) return;
+
+			const first = focusable[0];
+			const last = focusable[focusable.length - 1];
+
+			if (e.shiftKey && document.activeElement === first) {
+				e.preventDefault();
+				last.focus();
+			} else if (!e.shiftKey && document.activeElement === last) {
+				e.preventDefault();
+				first.focus();
+			}
+		};
+
+		// Pull focus back if it escapes (e.g. browser chrome round-trip)
+		const handleFocusIn = (e: FocusEvent) => {
+			if (!dialog.contains(e.target as Node)) {
+				const focusable = getFocusable();
+				if (focusable.length > 0) focusable[0].focus();
+				else dialog.focus();
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		document.addEventListener("focusin", handleFocusIn);
+		dialog.focus();
+
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+			document.removeEventListener("focusin", handleFocusIn);
 		};
 	}, []);
 
@@ -76,10 +132,20 @@ export default function Customizer({
 				if (e.target === e.currentTarget) onClose();
 			}}
 		>
-			<div className="bg-soft-white rounded-2xl max-w-6xl w-full max-h-[92vh] overflow-hidden shadow-2xl shadow-dark-text/10 animate-fade-up in-view flex flex-col">
+			<div
+				ref={dialogRef}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="customizer-title"
+				tabIndex={-1}
+				className="bg-soft-white rounded-2xl max-w-6xl w-full max-h-[92vh] overflow-hidden shadow-2xl shadow-dark-text/10 animate-fade-up in-view flex flex-col outline-none"
+			>
 				{/* Header */}
 				<div className="flex items-center justify-between px-6 py-4 border-b shrink-0 bg-soft-white border-denim-blue/10">
-					<h3 className="text-2xl tracking-tight font-display text-denim-blue">
+					<h3
+						id="customizer-title"
+						className="text-2xl tracking-tight font-display text-denim-blue"
+					>
 						Crea tu próximo guardapolvo
 					</h3>
 					<button
