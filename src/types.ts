@@ -28,9 +28,21 @@ export interface WhatsAppParams {
 
 export type SheetType = "products" | "details";
 
-export type DriveFolderType = "gallery" | "stamps" | "borderColors";
+export type DriveFolderType =
+	| "gallery"
+	| "stamps"
+	| "borderColors"
+	| "productsImages";
 
 export interface DriveImage {
 	id: string;
 	name: string;
+	url?: string;
+	placeholder?: boolean;
+}
+
+export interface DriveFolder {
+	id: string;
+	name: string;
+	images: DriveImage[];
 }

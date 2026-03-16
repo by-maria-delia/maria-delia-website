@@ -1,17 +1,30 @@
 import { useState } from "react";
-import { useProducts } from "../data";
-import type { Product } from "../types";
+import { useProductImages, useProducts } from "../data";
+import type { DriveImage, Product } from "../types";
 import Customizer from "./Customizer";
 import FadeUp from "./FadeUp";
 import ProductCard from "./ProductCard";
 
 export default function ModelsGallery() {
 	const { data } = useProducts();
+	const { folders } = useProductImages();
 	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
 	const products = data.filter(
 		(row) => row.disponible?.toUpperCase() === "TRUE",
 	);
+
+	const getModelImages = (productName: string): DriveImage[] => {
+		const folder = folders.find(
+			(f) => f.name.toLowerCase() === productName.toLowerCase(),
+		);
+		if (!folder) return [];
+		return [...folder.images].sort((a, b) => {
+			const numA = Number(a.name.match(/(\d+)/)?.[1] ?? 0);
+			const numB = Number(b.name.match(/(\d+)/)?.[1] ?? 0);
+			return numA - numB;
+		});
+	};
 
 	return (
 		<section id="modelos" className="px-4 py-24 bg-cream/50">
@@ -26,11 +39,15 @@ export default function ModelsGallery() {
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
 					{products.map((product, idx) => (
 						// biome-ignore lint/suspicious/noArrayIndexKey: index is fine here since products won't be reordered or filtered
 						<FadeUp key={product.nombre + idx} delay={Math.min(idx, 4) * 80}>
-							<ProductCard product={product} onCustomize={setSelectedProduct} />
+							<ProductCard
+								product={product}
+								modelImages={getModelImages(product.nombre)}
+								onCustomize={setSelectedProduct}
+							/>
 						</FadeUp>
 					))}
 				</div>
@@ -39,6 +56,7 @@ export default function ModelsGallery() {
 			{selectedProduct && (
 				<Customizer
 					product={selectedProduct}
+					modelImages={getModelImages(selectedProduct.nombre)}
 					onClose={() => setSelectedProduct(null)}
 				/>
 			)}

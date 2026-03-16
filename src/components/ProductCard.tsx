@@ -1,61 +1,54 @@
 import { driveImageUrl } from "../hooks/useDriveFolder";
-import type { Product } from "../types";
+import type { DriveImage, Product } from "../types";
+import ImagePlaceholder from "./ImagePlaceholder";
 
 interface ProductCardProps {
 	product: Product;
+	modelImages?: DriveImage[];
 	onCustomize: (product: Product) => void;
 }
 
 export default function ProductCard({
 	product,
+	modelImages,
 	onCustomize,
 }: ProductCardProps) {
+	const imageSrc =
+		modelImages && modelImages.length > 0
+			? driveImageUrl(modelImages[0].id)
+			: product.imagen
+				? driveImageUrl(product.imagen)
+				: null;
+
 	return (
-		<div className="flex flex-col overflow-hidden transition-all border group bg-soft-white rounded-2xl border-denim-blue/8 hover:border-school-blue/25 hover:shadow-lg hover:shadow-school-blue/8">
-			<div className="overflow-hidden aspect-3/4 bg-cream">
-				{product.imagen ? (
+		<div className="flex flex-col overflow-hidden transition-all border group bg-soft-white rounded-xl border-denim-blue/8 hover:border-school-blue/25 hover:shadow-lg hover:shadow-school-blue/8">
+			<div className="overflow-hidden aspect-square bg-cream">
+				{imageSrc ? (
 					<img
-						src={driveImageUrl(product.imagen)}
+						src={imageSrc}
 						alt={product.nombre}
-						className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+						className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-700 ease-out"
 					/>
 				) : (
-					<div className="flex items-center justify-center w-full h-full text-soft-gray/50">
-						<svg
-							className="w-16 h-16"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={1}
-								d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-							/>
-						</svg>
-					</div>
+					<ImagePlaceholder />
 				)}
 			</div>
 
-			<div className="flex flex-col flex-1 p-5">
-				<h3 className="mb-1 text-lg font-semibold tracking-tight text-dark-text">
+			<div className="flex flex-col flex-1 p-3 md:p-4">
+				<h3 className="mb-0.5 text-sm md:text-base font-semibold tracking-tight text-dark-text">
 					{product.nombre}
 				</h3>
-				<span className="inline-block mb-3 text-sm font-handwritten text-teacher-pink">
-					Personalizable
-				</span>
 
 				<div className="mt-auto">
 					{product.precio && (
-						<p className="mb-4 text-xl font-bold text-denim-blue tabular-nums">
+						<p className="mb-3 text-base md:text-lg font-bold text-denim-blue tabular-nums">
 							{product.precio}
 						</p>
 					)}
 					<button
 						type="button"
 						onClick={() => onCustomize(product)}
-						className="btn-press w-full bg-denim-blue text-white font-semibold py-2.5 rounded-lg hover:bg-denim-blue/90 hover:shadow-md hover:shadow-denim-blue/15 transition-all cursor-pointer"
+						className="btn-press w-full bg-denim-blue text-white font-semibold py-2 text-xs md:text-sm rounded-lg hover:bg-denim-blue/90 hover:shadow-md hover:shadow-denim-blue/15 transition-all cursor-pointer"
 					>
 						Ver y personalizar
 					</button>
