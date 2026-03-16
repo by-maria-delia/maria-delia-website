@@ -36,7 +36,7 @@ export default function ProductCard({
 			</div>
 
 			<div className="flex flex-col flex-1 p-3 md:p-4">
-				<h3 className="mb-0.5 text-sm md:text-base font-semibold tracking-tight text-dark-text">
+				<h3 className="mb-0.5 text-base font-semibold tracking-tight text-dark-text">
 					{product.nombre}
 				</h3>
 
@@ -49,7 +49,7 @@ export default function ProductCard({
 					<button
 						type="button"
 						onClick={() => onCustomize(product)}
-						className="btn-press w-full bg-denim-blue text-white font-semibold py-2 text-xs md:text-sm rounded-lg hover:bg-denim-blue/90 hover:shadow-md hover:shadow-denim-blue/15 transition-all cursor-pointer"
+						className="btn-press w-full bg-denim-blue text-white font-semibold py-2 text-sm rounded-lg hover:bg-denim-blue/90 hover:shadow-md hover:shadow-denim-blue/15 transition-all cursor-pointer"
 					>
 						Ver y personalizar
 					</button>
