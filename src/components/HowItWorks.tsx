@@ -24,7 +24,7 @@ const steps = [
 	{
 		number: "2",
 		title: "Personalizá",
-		desc: "Elegí talle, color de borde y estampado a tu gusto.",
+		desc: "Elegí talle, bolsillo y estampado a tu gusto.",
 		icon: (
 			<svg
 				className="w-6 h-6"

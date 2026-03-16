@@ -146,7 +146,7 @@ export default function Customizer({
 						id="customizer-title"
 						className="text-2xl tracking-tight font-display text-denim-blue"
 					>
-						Crea tu próximo guardapolvo
+						Personalizá tu guardapolvo
 					</h3>
 					<button
 						type="button"
@@ -334,12 +334,12 @@ export default function Customizer({
 									: "bg-denim-blue/20 cursor-not-allowed text-denim-blue/40",
 							)}
 						>
-							Finalizar por WhatsApp
+							Enviar pedido por WhatsApp
 						</button>
 
 						{!isValid && (
 							<p className="text-xs text-center text-soft-gray">
-								Seleccioná talle, color de borde y estampado para continuar.
+								Seleccioná talle, bolsillo y estampado para continuar.
 							</p>
 						)}
 					</div>

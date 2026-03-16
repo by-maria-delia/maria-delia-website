@@ -34,7 +34,7 @@ export default function ModelsGallery() {
 						Nuestros modelos
 					</h2>
 					<p className="max-w-md mx-auto text-soft-gray">
-						Cada uno se puede personalizar con tu talle, color y estampado
+						Cada uno se puede personalizar con tu talle, bolsillo y estampado
 						favorito
 					</p>
 				</div>
