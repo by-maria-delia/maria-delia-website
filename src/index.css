@@ -193,6 +193,47 @@ p {
 		drop-shadow(-1px -1px 1px var(--color-denim-blue));
 }
 
+@keyframes button-ready {
+	0% {
+		transform: scale(1);
+	}
+	30% {
+		transform: scale(1.03);
+	}
+	60% {
+		transform: scale(0.99);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes listo-in {
+	0% {
+		opacity: 0;
+		transform: translateY(5px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-button-ready {
+	animation: button-ready 0.55s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-listo-in {
+	animation: listo-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-button-ready,
+	.animate-listo-in {
+		animation: none;
+	}
+}
+
 .model-mask-shadow-inner {
 	filter: drop-shadow(
 			-1px 0px 0px color-mix(in srgb, var(--color-dark-text) 57%, transparent)

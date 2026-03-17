@@ -11,7 +11,7 @@ export default function Hero() {
 
 			<div className="relative w-full max-w-3xl mx-auto">
 				<FadeUp>
-					<p className="mb-4 text-lg font-handwritten text-denim-blue">
+					<p className="mb-4 text-xl font-handwritten text-denim-blue">
 						Hechos a mano, pensados para vos
 					</p>
 				</FadeUp>

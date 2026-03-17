@@ -3,7 +3,6 @@ import { driveImageUrl } from "../hooks/useDriveFolder";
 import FadeUp from "./FadeUp";
 
 export default function Showcase() {
-	// TODO: handle error/loading states
 	const { images: galleryImages } = useGalleryImages();
 
 	if (galleryImages.length === 0) return null;

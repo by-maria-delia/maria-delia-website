@@ -201,20 +201,20 @@ export default function Customizer({
 						{/* Size selector */}
 						{sizes.length > 0 && (
 							<fieldset>
-								<legend className="block mb-3 text-sm font-semibold text-dark-text">
+								<legend className="block mb-3 font-display text-lg text-denim-blue">
 									Talle <span className="text-teacher-pink">*</span>
 								</legend>
-								<div className="flex flex-wrap gap-2">
+								<div className="flex flex-wrap gap-2.5">
 									{sizes.map((s) => (
 										<button
 											type="button"
 											key={s}
 											onClick={() => setSize(s)}
 											className={cn(
-												"btn-press px-4 py-2 rounded-lg text-sm font-semibold border transition-all cursor-pointer",
+												"btn-press px-5 py-2.5 rounded-lg text-sm font-bold border-2 transition-all cursor-pointer",
 												size === s
-													? "bg-denim-blue text-white border-denim-blue shadow-sm"
-													: "border-denim-blue/20 text-denim-blue hover:border-denim-blue/40 hover:bg-denim-blue/5",
+													? "bg-teacher-pink text-white border-teacher-pink shadow-md"
+													: "bg-cream border-denim-blue/15 text-denim-blue hover:border-teacher-pink/50 hover:bg-teacher-pink/8",
 											)}
 										>
 											{s}
@@ -227,7 +227,7 @@ export default function Customizer({
 						{/* Pockets selector */}
 						{pocketsImages.length > 0 && (
 							<fieldset>
-								<legend className="block mb-3 text-sm font-semibold text-dark-text">
+								<legend className="block mb-3 font-display text-lg text-denim-blue">
 									Tipo de bolsillo <span className="text-teacher-pink">*</span>
 								</legend>
 								<div
@@ -244,12 +244,29 @@ export default function Customizer({
 												key={image.id}
 												onClick={() => setPockets(displayName)}
 												className={cn(
-													"btn-press rounded-xl border overflow-hidden transition-all shrink-0 h-fit max-w-28 cursor-pointer",
+													"btn-press relative rounded-xl border-2 overflow-hidden transition-all shrink-0 h-fit max-w-28 cursor-pointer",
 													pockets === displayName
-														? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
-														: "border-denim-blue/12 hover:border-denim-blue/30",
+														? "border-teacher-pink ring-2 ring-teacher-pink/20 shadow-md"
+														: "border-denim-blue/15 hover:border-teacher-pink/30",
 												)}
 											>
+												{pockets === displayName && (
+													<span className="absolute top-1.5 right-1.5 z-10 flex items-center justify-center w-5 h-5 bg-teacher-pink rounded-full shadow-sm pointer-events-none">
+														<svg
+															className="w-3 h-3 text-white"
+															fill="none"
+															viewBox="0 0 24 24"
+															stroke="currentColor"
+															strokeWidth={3}
+														>
+															<path
+																strokeLinecap="round"
+																strokeLinejoin="round"
+																d="M5 13l4 4L19 7"
+															/>
+														</svg>
+													</span>
+												)}
 												<div className="bg-cream">
 													<img
 														src={driveImageUrl(image.id)}
@@ -268,7 +285,7 @@ export default function Customizer({
 						{/* Estampado selector */}
 						{stampImages.length > 0 && (
 							<fieldset className="min-w-0">
-								<legend className="block mb-3 text-sm font-semibold text-dark-text">
+								<legend className="block mb-3 font-display text-lg text-denim-blue">
 									Tipo de estampado <span className="text-teacher-pink">*</span>
 								</legend>
 								<div className="flex gap-3 overflow-x-scroll py-2.5 px-1 custom-scrollbar">
@@ -280,12 +297,29 @@ export default function Customizer({
 												key={image.id}
 												onClick={() => setEstampado(displayName)}
 												className={cn(
-													"btn-press rounded-xl border overflow-hidden transition-all cursor-pointer shrink-0 w-28",
+													"btn-press relative rounded-xl border-2 overflow-hidden transition-all cursor-pointer shrink-0 w-28",
 													estampado === displayName
-														? "border-denim-blue ring-2 ring-denim-blue/20 shadow-sm"
-														: "border-denim-blue/12 hover:border-denim-blue/30",
+														? "border-teacher-pink ring-2 ring-teacher-pink/20 shadow-md"
+														: "border-denim-blue/15 hover:border-teacher-pink/30",
 												)}
 											>
+												{estampado === displayName && (
+													<span className="absolute top-1.5 right-1.5 z-10 flex items-center justify-center w-5 h-5 bg-teacher-pink rounded-full shadow-sm pointer-events-none">
+														<svg
+															className="w-3 h-3 text-white"
+															fill="none"
+															viewBox="0 0 24 24"
+															stroke="currentColor"
+															strokeWidth={3}
+														>
+															<path
+																strokeLinecap="round"
+																strokeLinejoin="round"
+																d="M5 13l4 4L19 7"
+															/>
+														</svg>
+													</span>
+												)}
 												<div className="aspect-square bg-cream">
 													<img
 														src={driveImageUrl(image.id)}
@@ -328,20 +362,24 @@ export default function Customizer({
 							onClick={handleSubmit}
 							disabled={!isValid}
 							className={cn(
-								"btn-press w-full py-3.5 rounded-lg font-semibold text-white transition-all cursor-pointer",
+								"btn-press w-full py-3.5 rounded-xl font-semibold text-white transition-colors cursor-pointer",
 								isValid
-									? "bg-leaf-green hover:bg-leaf-green/90 hover:shadow-lg hover:shadow-leaf-green/20"
+									? "bg-leaf-green hover:bg-leaf-green/90 hover:shadow-lg hover:shadow-leaf-green/20 animate-button-ready"
 									: "bg-denim-blue/20 cursor-not-allowed text-denim-blue/40",
 							)}
 						>
 							Enviar pedido por WhatsApp
 						</button>
 
-						{!isValid && (
-							<p className="text-xs text-center text-soft-gray">
-								Seleccioná talle, bolsillo y estampado para continuar.
-							</p>
-						)}
+						<p
+							className={cn("text-sm text-center text-soft-gray", {
+								"font-semibold text-leaf-green animate-listo-in": isValid,
+							})}
+						>
+							{isValid
+								? "¡Todo listo para enviar!"
+								: "Seleccioná talle, bolsillo y estampado para continuar."}
+						</p>
 					</div>
 				</div>
 			</div>
