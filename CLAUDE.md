@@ -46,7 +46,7 @@ Artesanal, calido, prolijo, clasico, amigable, docente, femenino. All copy in **
 - Animations: FadeUp wrapper component + CSS keyframes (fade-up, fade-in, slide-down) with stagger delays
 - Responsive: mobile-first with md/lg breakpoints, hamburger menu on mobile
 - Env vars prefixed with `VITE_` (accessed via `import.meta.env`)
-- Vite base path: `/maria-delia/`
+- Vite base path: `/`
 
 ## Environment Variables (.env)
 ```
