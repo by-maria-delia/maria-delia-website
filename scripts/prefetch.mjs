@@ -209,12 +209,19 @@ async function main() {
 	const productsData = readJson("products.json");
 	const productImagesData = readJson("product-images.json");
 
+	const availableProducts = productsData.data.filter(
+		(p) => p.disponible === "TRUE",
+	);
+	const availableProductNames = new Set(availableProducts.map((p) => p.nombre));
+
 	const imageIds = [
 		...galleryData.data.map((f) => f.id),
 		...stampsData.data.map((f) => f.id),
 		...pocketsData.data.map((f) => f.id),
-		...productsData.data.map((p) => p.imagen).filter(Boolean),
-		...productImagesData.data.flatMap((folder) => folder.images.map((img) => img.id)),
+		...availableProducts.map((p) => p.imagen).filter(Boolean),
+		...productImagesData.data
+			.filter((folder) => availableProductNames.has(folder.name))
+			.flatMap((folder) => folder.images.map((img) => img.id)),
 	];
 
 	// 3. Download images + write manifest
